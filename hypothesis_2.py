@@ -88,6 +88,11 @@ if __name__ == '__main__':
     #edge = cv2.Canny(gray, thrs1, thrs2, apertureSize=5)
     digits = split2d(gray, (50, 50))
     print (len(digits))
+    h, w = gray.shape[:2]
+    print (w)
+    sx = 50
+    x = w/sx
+    mas_false = []
     
     for c in digits:
         edge = cv2.Canny(c, thrs1, thrs2, apertureSize=5)
@@ -102,5 +107,20 @@ if __name__ == '__main__':
         #cv2.destroyAllWindows()
         if (abs(area_test - area_1) <= 5 or abs(area_test - area_2) <= 5 or abs(area_test - area_3) <= 5 or abs(area_test - area_4) <= 5 or abs(area_test - area_5) <= 5):
             print ("true")
+            mas_false.append(1)
         else:
             print ("false")
+            mas_false.append(0)
+    for i in mas_false:
+        if count < x:
+            print (i, end = ' ')
+            #print (" ")
+            count = count + 1
+        else:
+            count = 1
+            print ('\n', end = '')
+            print (i, end = ' ')
+    print ('\n', end = '')
+    cv2.imshow('edge', img_test)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
