@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-
-
 # Python 2/3 compatibility
 from __future__ import print_function
 
@@ -16,11 +14,9 @@ from numpy.linalg import norm
 # local modules
 from common import clock, mosaic
 
-
-
 SZ = 50 # size of each digit is SZ x SZ
-CLASS_N = 10
-DIGITS_FN = '../data/digit.jpg'
+CLASS_N = 5
+DIGITS_FN = '../data/1_2.png'
 
 def split2d(img, cell_size, flatten=True):
     h, w = img.shape[:2]
@@ -126,15 +122,23 @@ if __name__ == '__main__':
     samples = preprocess_hog(digits2)
 
     train_n = int(0.9*len(samples))
-    cv2.imshow('test set', mosaic(25, digits[train_n:]))
     digits_train, digits_test = np.split(digits2, [train_n])
     samples_train, samples_test = np.split(samples, [train_n])
     labels_train, labels_test = np.split(labels, [train_n])
 
 
     print('training KNearest...')
-    model = KNearest(k=4)
+    model = KNearest(k=6)
     model.train(samples_train, labels_train)
+    
+    digits, labels = load_digits(DIGITS_FN1)
+    digits2 = list(map(deskew, digits))
+    samples = preprocess_hog(digits2)
+    train_n = int(0.9*len(samples))
+    digits_train, digits_test = np.split(digits2, [train_n])
+    samples_train, samples_test = np.split(samples, [train_n])
+    labels_train, labels_test = np.split(labels, [train_n])
+    
     vis = evaluate_model(model, digits_test, samples_test, labels_test)
     cv2.imshow('KNearest test', vis)
 
